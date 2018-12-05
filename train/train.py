@@ -46,13 +46,13 @@ class Network(nn.Module):
         return out
 
 random_dataset = Dataset("random.csv")
-dataset_generator = data.DataLoader(random_dataset, batch_size=1, shuffle=False)
+dataset_generator = data.DataLoader(random_dataset, batch_size=100, shuffle=False)
 
 device = torch.device('cpu')
-model = Network(0, []).to(device)
+model = Network(3, [10, 20, 10]).to(device)
 
 criterion = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.5) 
+optimizer = torch.optim.Adam(model.parameters(), lr = 0.0001)
 
 for epoch in range(100):
     print(epoch)
@@ -74,6 +74,6 @@ for epoch in range(100):
             outputs = model(local_data)
             loss = criterion(outputs, local_pos)
             loss_tot += loss.item()
-        print(loss_tot)
+        print(loss_tot / 100000)
             
 
