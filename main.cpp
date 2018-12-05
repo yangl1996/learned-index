@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     MatrixXd ***weights;
     MatrixXd ***biases;
     
-    std::ifstream modelfs("model.txt");
+    std::ifstream modelfs(argv[1]);
     if(!modelfs) {
         std::cout << "Failed to open model file." << std::endl;
         return 1;
@@ -79,6 +79,27 @@ int main(int argc, char *argv[])
     
     modelfs.close();
     
+    std::ifstream datafs(argv[2]);
+    if(!datafs) {
+        std::cout << "Failed to open data file." << std::endl;
+        return 1;
+    }
+
+    int num_data;
+    int *data;
+    int *pos;
+
+    datafs >> num_data;
+    data = new int[num_data];
+    pos = new int[num_data];
+
+    for (int i = 0; i < num_data; i++) {
+        datafs >> data[i];
+        datafs >> pos[i];
+    }
+
+    datafs.close();
+
     MatrixXd m(2,2);
     m(0,0) = 3;
     m(1,0) = 2.5;

@@ -1,4 +1,5 @@
 learned-index
+*.csv
 *.txt
 *.json
 # Created by https://www.gitignore.io/api/vim,c++,macos,textmate

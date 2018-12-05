@@ -1,4 +1,4 @@
-CC=clang++# -march=native
+CC=clang++ -march=native
 CFLAGS=-I/usr/local/include/eigen3 -I/usr/local/include/rapidjson
 
 all:
