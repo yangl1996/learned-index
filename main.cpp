@@ -106,12 +106,12 @@ int main(int argc, char *argv[])
     std::cin.get();
     
     double err = 0.0;
+    MatrixXd res(1, 1);
+    
     auto start_time = std::chrono::high_resolution_clock::now();
-    MatrixXd res;
     for (int i = 0; i < num_data; i++) {
         int model_idx = 0;
         for (int stg = 0; stg < num_stage; stg++) {
-            res = MatrixXd(1, 1);
             res(0, 0) = double(data[i]);
             for (int lay = 0; lay < num_layer[stg][model_idx]; lay++) {
                 res = res * weights[stg][model_idx][lay] + biases[stg][model_idx][lay];
