@@ -1,7 +1,8 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include <fstream>
-#include <stdlib.h>
+#include <chrono>
+#include <cstdlib>
 
 using Eigen::MatrixXd;
 
@@ -102,7 +103,7 @@ int main(int argc, char *argv[])
     datafs.close();
     
     double err = 0.0;
-    
+    auto start_time = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < num_data; i++) {
         int model_idx = 0;
         MatrixXd res(1, 1);
@@ -120,13 +121,8 @@ int main(int argc, char *argv[])
         int final_res = int(res(0, 0));
         err += abs(final_res - pos[i]);
     }
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() / (double)(1000000 * num_data) << std::endl;
     
     std::cout << err / num_data << std::endl;
-
-    MatrixXd m(2,2);
-    m(0,0) = 3;
-    m(1,0) = 2.5;
-    m(0,1) = -1;
-    m(1,1) = m(1,0) + m(0,1);
-    std::cout << m << std::endl;
 }

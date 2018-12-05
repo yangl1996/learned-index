@@ -1,7 +1,7 @@
-CC=clang++ -march=native
+CC=clang++ -march=native -std=c++1y -Ofast
 CFLAGS=-I/usr/local/include/eigen3 -I/usr/local/include/rapidjson
 
-all:
+bin:
 	$(CC) main.cpp -o learned-index $(CFLAGS)
 
 .PHONY: clean test
@@ -9,7 +9,7 @@ all:
 clean:
 	rm -f learned-index
 
-test: all
+test: bin
 	scp 192.168.146.134:/home/leiy/Learned-Indexes/model/Random/full_train/NN/100000.json .
 	scp 192.168.146.134:/home/leiy/Learned-Indexes/data/random.csv .
 	python processmodel.py > model.txt
