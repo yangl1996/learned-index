@@ -1,6 +1,7 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include <fstream>
+#include <stdlib.h>
 
 using Eigen::MatrixXd;
 
@@ -99,6 +100,28 @@ int main(int argc, char *argv[])
     }
 
     datafs.close();
+    
+    double err = 0.0;
+    
+    for (int i = 0; i < num_data; i++) {
+        int model_idx = 0;
+        MatrixXd res(1, 1);
+        for (int stg = 0; stg < num_stage; stg++) {
+            res = MatrixXd(1, 1);
+            res(0, 0) = double(data[i]);
+            for (int lay = 0; lay < num_layer[stg][model_idx]; lay++) {
+                res = res * weights[stg][model_idx][lay] + biases[stg][model_idx][lay];
+            }
+            model_idx = int(res(0, 0));
+            if (model_idx >= num_model[stg+1]) {
+                model_idx = num_model[stg+1] - 1;
+            }
+        }
+        int final_res = int(res(0, 0));
+        err += abs(final_res - pos[i]);
+    }
+    
+    std::cout << err / num_data << std::endl;
 
     MatrixXd m(2,2);
     m(0,0) = 3;
