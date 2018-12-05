@@ -1,5 +1,5 @@
 CC=clang++ -march=native -std=c++1y -Ofast
-CFLAGS=-I/usr/local/include/eigen3 -I/usr/local/include/rapidjson
+CFLAGS=-I/usr/local/include/eigen3
 
 bin:
 	$(CC) main.cpp -o learned-index $(CFLAGS)

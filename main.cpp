@@ -102,11 +102,14 @@ int main(int argc, char *argv[])
 
     datafs.close();
     
+    std::cout << "Press enter to start" << std::endl;
+    std::cin.get();
+    
     double err = 0.0;
     auto start_time = std::chrono::high_resolution_clock::now();
+    MatrixXd res;
     for (int i = 0; i < num_data; i++) {
         int model_idx = 0;
-        MatrixXd res(1, 1);
         for (int stg = 0; stg < num_stage; stg++) {
             res = MatrixXd(1, 1);
             res(0, 0) = double(data[i]);

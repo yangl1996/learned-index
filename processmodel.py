@@ -43,14 +43,15 @@ for stage_idx in range(num_stage):
                     for i in range(weight_rows):
                         for j in range(weight_cols):
                             print weight[i][j]
-                    bias_rows = len(bias)
                     if type(bias[0]) is float:
-                        bias_cols = 1
+                        bias_rows = 1
+                        bias_cols = len(bias)
                         print bias_rows
                         print bias_cols
-                        for i in range(bias_rows):
+                        for i in range(bias_cols):
                             print bias[i]
                     else:
+                        bias_rows = len(bias)
                         bias_cols = len(bias[0])
                         print bias_rows
                         print bias_cols
