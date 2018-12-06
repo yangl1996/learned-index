@@ -98,10 +98,12 @@ if __name__ == "__main__":
             # use Adam algo for training
             optimizer = torch.optim.Adam(model.parameters(), lr = 0.001)
             # load dataset
-            data_gen = torch_data.DataLoader(ds[stage_idx][model_idx], batch_size=100, shuffle=False)
+            data_gen = torch_data.DataLoader(ds[stage_idx][model_idx], batch_size=64, shuffle=False)
+            # we will stop training when loss stops decreasing
+            last_loss = float('inf')
 
             print("Stage={}, Model={}, {} data points".format(stage_idx, model_idx, len(ds[stage_idx][model_idx])))
-            for epoch in range(50):
+            for epoch in range(1000):
                 print("Epoch", epoch)
                 # train model
                 for local_data, local_pos in data_gen:
@@ -123,6 +125,11 @@ if __name__ == "__main__":
                         loss = criterion(outputs, local_pos)
                         loss_tot += loss.item()
                     print("Loss:", loss_tot / len(ds[stage_idx][model_idx]))
+                    # if lost stops decreasing, just stop training
+                    if (last_loss - loss_tot) < 0.01:
+                        break
+                    else:
+                        last_loss = loss_tot
 
             # append the model we just trained to model tree
             models[stage_idx].append(model)
@@ -177,5 +184,3 @@ if __name__ == "__main__":
     print("Final Loss:", float(err_tot) / len(test_ds))
 
 
-            
-            
