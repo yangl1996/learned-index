@@ -65,7 +65,7 @@ if __name__ == "__main__":
     ds = [[Dataset(data, pos)]]
 
     # max of index (position), used to determine next-stage model
-    max_pos = 1000
+    max_pos = len(data)
 
     device = torch.device('cpu')
 
@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
     # model_params is a tuple, entry i is the params of models in stage i
     # each entry specifies (num of hidden layers, size of each hidden layer)
-    model_params = ((0, []), (0, []))
+    model_params = ((2, [4, 8]), (2, [4, 8]))
 
     # number of stages
     num_stage = len(num_model)
@@ -126,7 +126,7 @@ if __name__ == "__main__":
                         loss_tot += loss.item()
                     print("Loss:", loss_tot / len(ds[stage_idx][model_idx]))
                     # if lost stops decreasing, just stop training
-                    if (last_loss - loss_tot) < 0.01:
+                    if 0 < (last_loss - loss_tot) / last_loss < 0.005:
                         break
                     else:
                         last_loss = loss_tot
