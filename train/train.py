@@ -100,8 +100,9 @@ if __name__ == "__main__":
             # load dataset
             data_gen = torch_data.DataLoader(ds[stage_idx][model_idx], batch_size=100, shuffle=False)
 
-            for epoch in range(100):
-                print(epoch)
+            print("Stage={}, Model={}, {} data points".format(stage_idx, model_idx, len(ds[stage_idx][model_idx])))
+            for epoch in range(50):
+                print("Epoch", epoch)
                 # train model
                 for local_data, local_pos in data_gen:
                     local_data, local_pos = local_data.to(device), local_pos.to(device)
@@ -121,7 +122,7 @@ if __name__ == "__main__":
                         outputs = model(local_data)
                         loss = criterion(outputs, local_pos)
                         loss_tot += loss.item()
-                    print(loss_tot)
+                    print("Loss:", loss_tot / len(ds[stage_idx][model_idx]))
 
             # append the model we just trained to model tree
             models[stage_idx].append(model)
@@ -154,8 +155,7 @@ if __name__ == "__main__":
     # testing. load datapoints one by one
     test_ds = Dataset(data, pos)
     test_gen = torch_data.DataLoader(test_ds, batch_size=1, shuffle=False)
-    err_calc = nn.L1Loss()
-    err_tot = 0.0
+    err_tot = 0
     for local_data, local_pos in test_gen:
         local_data, local_pos = local_data.to(device), local_pos.to(device)
         model_sel = 0
@@ -172,8 +172,9 @@ if __name__ == "__main__":
                     model_sel = 0
             # if it's the last layer, the output is the position (index)
             else:
-                err_tot += err_calc(output, local_pos).item()
-    print(err_tot / 100000)
+                err_tot += abs(int(output.item()) - int(local_pos.item()))
+
+    print("Final Loss:", float(err_tot) / len(test_ds))
 
 
             
