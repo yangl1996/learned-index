@@ -68,6 +68,7 @@ if __name__ == "__main__":
     # max of index (position), used to determine next-stage model
     max_pos = len(data)
 
+    torch.set_num_threads(8)
     device = torch.device('cpu')
 
     # model is a 2-dim list, entry i, j is the model for stage i, model j
@@ -104,7 +105,7 @@ if __name__ == "__main__":
             last_loss = float('inf')
 
             print("Stage={}, Model={}, {} data points".format(stage_idx, model_idx, len(ds[stage_idx][model_idx])))
-            for epoch in range(1000):
+            for epoch in range(5000):
                 print("Epoch", epoch)
                 # train model
                 for local_data, local_pos in data_gen:
@@ -127,7 +128,7 @@ if __name__ == "__main__":
                         loss_tot += loss.item()
                     print("Loss:", loss_tot / len(ds[stage_idx][model_idx]))
                     # if lost stops decreasing, just stop training
-                    if 0 < (last_loss - loss_tot) / last_loss < 0.005:
+                    if (last_loss - loss_tot) / last_loss < 0.001:
                         break
                     else:
                         last_loss = loss_tot
