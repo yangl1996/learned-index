@@ -48,6 +48,20 @@ if __name__ == "__main__":
             exit(1)
         for i in range(num_data):
             dt.append(int(random.expovariate(lbd)))
+    elif dist == 'lognorm':
+        mu = 0.0
+        sigma = 0.0
+        if len(pa) == 2:
+            mu = pa[0]
+            sigma = pa[1]
+        elif len(pa) == 0:
+            mu = 10.0
+            sigma = 1.0
+        else:
+            print("Log normal distribution requires 2 parameters (mu and sigma)")
+            exit(1)
+        for i in range(num_data):
+            dt.append(int(random.lognormvariate(mu, sigma)))
 
     dt = sorted(dt)
 
